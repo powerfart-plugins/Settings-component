@@ -4,7 +4,7 @@
 
 A component that does routine work for you
 
-### Example
+## Example
 [Example file](test-plugin/index.js)
 ```js
     Settings.registerSettings({
@@ -48,12 +48,12 @@ A component that does routine work for you
     });
 ```
 
-### Documentation 
+## Documentation 
 
 > By default, items wait for **`key`** & **`def`** for `getSetting` and `updateSetting`/`toggleSetting`, 
 > however you can pass your props for example: **`value`** & **`onChange`**
 
-Implemented components: 
+### Implemented components: 
 - [Switch](#Switch)
 - [Color Picker](#ColorPicker)
 - [Slider](#Slider)
@@ -63,7 +63,7 @@ Implemented components:
 - [Checkbox](#Checkbox)
 - [Category](#Category)
 
-
+#
 <a name="Switch">Switch</a>
 - name
 - note 
