@@ -1,6 +1,7 @@
 /** A settings component that does routine work for you
  * @author Xinos#2003
  * @licence MIT
+ * @version 1.2
  * @link https://github.com/powerfart-plugins/Settings-component
  * @docs https://github.com/powerfart-plugins/Settings-component#documentation
  * @copyright (c) 2021 Xinos
