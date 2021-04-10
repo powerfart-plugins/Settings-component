@@ -1,6 +1,9 @@
-/*
- * Copyright (c) 2021 Xinos
- * Licensed under the MIT
+/** A settings component that does routine work for you
+ * @author Xinos#2003
+ * @licence MIT
+ * @link https://github.com/powerfart-plugins/Settings-component
+ * @docs https://github.com/powerfart-plugins/Settings-component#documentation
+ * @copyright (c) 2021 Xinos
  */
 
 const { SwitchItem, TextInput, Category, ColorPickerInput, SliderInput, SelectInput, RadioGroup, CheckboxInput } = require('powercord/components/settings');
