@@ -4,7 +4,7 @@
  */
 
 const { SwitchItem, TextInput, Category, ColorPickerInput, SliderInput, SelectInput, RadioGroup, CheckboxInput } = require('powercord/components/settings');
-const { React, getModule, constants: { DEFAULT_ROLE_COLOR } } = require('powercord/webpack');
+const { React, constants: { DEFAULT_ROLE_COLOR } } = require('powercord/webpack');
 
 /* eslint-disable no-undefined, object-property-newline, no-use-before-define */
 class Settings extends React.Component {
@@ -16,7 +16,7 @@ class Settings extends React.Component {
    * @param {String} params.label by default = entityID to titleCase
    * @param {Array} params.items
    */
-  static registerSettings ({ id, entityID, label, items }) {
+  static register ({ id, entityID, label, items }) {
     id = (id) ? id : `${entityID}-settings`;
     label = (label) ? label : snake2title(entityID);
 
@@ -54,42 +54,42 @@ class Settings extends React.Component {
   }
 
   renderSwitch (item) {
-    const { key, def } = item;
+    const { key, def, onClick, name } = item;
     const { getSetting, toggleSetting } = this.props;
-    const auto = (key && (def !== undefined));
+    const value = this._getValue(item.value);
 
     return (
       <SwitchItem
-        children={item.name}
-        onChange={(auto) ? () => toggleSetting(key, def) : item.onClick}
-        value={(auto) ? getSetting(key, def) : item.value }
         {...item}
+        children={name}
+        onChange={(v) => (onClick) ? this._passSetting(v, onClick) : toggleSetting(key, def)}
+        value={(key) ? getSetting(key, def) : value}
       />
     );
   }
 
   renderColorPicker (item) {
-    const { hex2int, int2hex } = getModule([ 'isValidHex' ], false);
-    const { key, def } = item;
+    const { key, def, onChange } = item;
     const { getSetting, updateSetting } = this.props;
     const realDef = (def === undefined) ? DEFAULT_ROLE_COLOR : def;
+    const value = this._getValue(item.value);
 
     return (
       <ColorPickerInput
-        value={(key) ? hex2int(getSetting(key, realDef)) : item.value}
-        onChange={(key) ? ((v) => updateSetting(key, (v === realDef) ? null : int2hex(v))) : item.onChange}
+        {...item}
+        value={(key) ? getSetting(key, realDef) : value}
+        onChange={(v) => (onChange) ? this._passSetting(v, onChange) : updateSetting(key, ((v === realDef) ? null : v))}
         children={item.name}
         default={item.defaultColor}
         defaultColors={item.defaultColors}
-        {...item}
       />
     );
   }
 
   renderSlider (item) {
-    const { key, def, sequenceNumsUp, renderMarker, value, onChange, keyboardStep, stickToMarkers } = item;
+    const { key, def, sequenceNumsUp, onChange, keyboardStep, stickToMarkers, name } = item;
     const { getSetting, updateSetting } = this.props;
-    const auto = (key && (def !== undefined));
+    const value = this._getValue(item.value);
 
     if (sequenceNumsUp) {
       item.markers = Array.from(
@@ -99,76 +99,100 @@ class Settings extends React.Component {
     }
     return (
       <SliderInput
-        onMarkerRender={(e) => (renderMarker === undefined) ? e : renderMarker}
-        initialValue={(auto) ? getSetting(key, def) : value}
-        onValueChange={(auto) ? ((v) => updateSetting(key, v)) : onChange}
+        {...item}
+        initialValue={(key) ? getSetting(key, def) : value}
+        onValueChange={(v) => (onChange) ? this._passSetting(v, onChange) : updateSetting(key, v)}
         keyboardStep={(keyboardStep === undefined) ? 1 : keyboardStep}
         stickToMarkers={(stickToMarkers === undefined) ? true : stickToMarkers}
-        children={item.name}
-        {...item}
+        children={name}
       />
     );
   }
 
   renderSelect (item) {
-    const { key, def } = item;
+    const { key, def, onChange, items, name } = item;
     const { getSetting, updateSetting } = this.props;
-    const auto = (key && (def !== undefined));
+    const value = this._getValue(item.value);
 
     return (
       <SelectInput
-        value={(auto) ? getSetting(key, def) : item.value}
-        onChange={(auto) ? (({ value }) => updateSetting(key, value)) : item.onChange}
-        options={item.items}
-        children={item.name}
         {...item}
+        value={(key) ? getSetting(key, def) : value}
+        onChange={(v) => (onChange) ? this._passSetting(v, onChange) : updateSetting(key, v.value)}
+        options={items}
+        children={name}
       />
     );
   }
 
   renderText (item) {
-    const { key, def } = item;
+    const { key, def, name, onChange, debounce } = item;
     const { getSetting, updateSetting } = this.props;
-    const auto = (key && (def !== undefined));
+    const value = this._getValue(item.value);
+    const defaultValue = this._getValue(item.default);
+    const runDebounce = (() => {
+      let timer = null;
+      return (callback) => {
+        clearTimeout(timer);
+        timer = setTimeout(callback, debounce || 250);
+      };
+    })();
+
+    function WrapTextInput (props) { // It is necessary to expand the functionality, so far only Errors
+      const [ error, onError ] = React.useState(null);
+      const newProps = {
+        ...props,
+        error,
+        onChange: (v) => {
+          onError(null);
+          runDebounce(() => {
+            const res = props.onChange(v);
+            onError(res?.error);
+          });
+        }
+      };
+
+      return <TextInput {...newProps}/>;
+    }
 
     return (
-      <TextInput
-        value={(auto) ? getSetting(key, def) : item.value}
-        onChange={(auto) ? ((v) => updateSetting(key, v)) : item.onChange}
-        defaultValue={item.default}
-        children={item.name}
+      <WrapTextInput
         {...item}
+        value={(key) ? getSetting(key, def) : value}
+        defaultValue={(key) ? getSetting(key, def) : defaultValue}
+        onChange={(v) => (onChange) ? this._passSetting(v, onChange) : updateSetting(key, v)}
+        children={name}
       />
     );
   }
 
   renderRadioGroup (item) {
-    const { key, def } = item;
+    const { key, def, onChange, name, items } = item;
     const { getSetting, updateSetting } = this.props;
-    const auto = (key && (def !== undefined));
+    const value = this._getValue(item.value);
 
     return (
       <RadioGroup
-        value={(auto) ? getSetting(key, def) : item.value}
-        onChange={(auto) ? (({ value }) => updateSetting(key, value)) : item.onChange}
-        options={item.items}
-        children={item.name}
         {...item}
+        value={(key) ? getSetting(key, def) : value}
+        onChange={(v) => (onChange) ? this._passSetting(v, onChange) : updateSetting(key, v.value)}
+        options={items}
+        children={name}
       />
     );
   }
 
   renderCheckbox (item) {
-    const { key, def } = item;
+    const { key, def, onClick, name } = item;
     const { getSetting, toggleSetting } = this.props;
     const auto = (key && (def !== undefined));
 
     return (
       <CheckboxInput
-        onChange={(auto) ? () => toggleSetting(key, def) : item.onClick}
-        value={(auto) ? getSetting(key, def) : item.value }
-        children={item.name}
         {...item}
+        onChange={(v) => (onClick) ? this._passSetting(v, onClick) : toggleSetting(key, v)}
+        value={(auto) ? getSetting(key, def) : item.value }
+        children={name}
       />
     );
   }
@@ -188,6 +212,15 @@ class Settings extends React.Component {
     props = { ...props, onChange, opened }; // eslint-disable-line object-property-newline
 
     return <Category {...props}/>;
+  }
+
+  _passSetting (value = null, handler) {
+    const { getSetting, updateSetting, toggleSetting } = this.props;
+    return handler({ getSetting, updateSetting, toggleSetting }, value);
+  }
+
+  _getValue (v) {
+    return (typeof v === 'function') ? this._passSetting(null, v) : v;
   }
 }
 

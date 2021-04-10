@@ -3,7 +3,7 @@ const Settings = require('../Settings.jsx');
 
 module.exports = class TS extends Plugin {
   async startPlugin () {
-    Settings.registerSettings({
+    Settings.register({
       entityID: this.entityID,
       label: 'Test settings',
       items: [
