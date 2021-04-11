@@ -76,7 +76,7 @@ Settings.register({
 <img src="preview/image1.png" width="700px" align="center" alt="settings component Preview">
 
 ## Real use
-- [Image tools](https://github.com/userXinos/image-tools/blob/main/utils/baseSettingStructure.js) (v1.2)
+- [Image tools](https://github.com/userXinos/image-tools/blob/main/utils/baseSettingsStructure.js) (v1.2)
 
 
 ## Documentation 
