@@ -223,7 +223,7 @@ class Settings extends React.Component {
   renderTabBar (item) {
     const classes = getModule([ 'topPill', 'item' ], false);
     const TabBar2  = (props) => {
-      const def = (props.opened === undefined) ? 0 : props.selected;
+      const def = (props.selected === undefined) ? 0 : props.selected;
       const [ selectedItem, onItemSelect ] = React.useState(def);
       props = {
         ...props,
