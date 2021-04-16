@@ -181,7 +181,7 @@ opened | Boolean               | true
 
 Param    | Type                  | Default
 ---------|-----------------------|---------
-items    | Array<TabBarItem>     |
+items    | Array<{TabBarItem}>   |
 selected | Number                | 0
 
 #### TabBarItem
