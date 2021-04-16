@@ -1,16 +1,18 @@
 /** A settings component that does routine work for you
  * @author Xinos#2003
  * @licence MIT
- * @version 1.2
+ * @version 1.3
  * @link https://github.com/powerfart-plugins/Settings-component
  * @docs https://github.com/powerfart-plugins/Settings-component#documentation
  * @copyright (c) 2021 Xinos
  */
 
 const { SwitchItem, TextInput, Category, ColorPickerInput, SliderInput, SelectInput, RadioGroup, CheckboxInput } = require('powercord/components/settings');
-const { React, constants: { DEFAULT_ROLE_COLOR } } = require('powercord/webpack');
+const { TabBar } = require('powercord/components');
+const { React, getModule, constants: { DEFAULT_ROLE_COLOR } } = require('powercord/webpack');
 
 /* eslint-disable no-undefined, object-property-newline, no-use-before-define */
+// noinspection JSUnresolvedFunction
 class Settings extends React.Component {
   /**
    * Automatically register settings
@@ -46,7 +48,8 @@ class Settings extends React.Component {
       text: this.renderText.bind(this),
       radioGroup: this.renderRadioGroup.bind(this),
       checkbox: this.renderCheckbox.bind(this),
-      category: this.renderCategory.bind(this)
+      category: this.renderCategory.bind(this),
+      tabBar: this.renderTabBar.bind(this)
     };
   }
 
@@ -202,20 +205,56 @@ class Settings extends React.Component {
   }
 
   renderCategory (item) {
+    const Category2 = (props) => {
+      const def = (props.opened === undefined) ? true : props.opened;
+      const [ opened, onChange ] = React.useState(def);
+      props = { ...props, onChange, opened };
+
+      return <Category {...props}/>;
+    };
+
     return (
-      <this._Category2
-        children={this.renderItems(item.items)}
-        {...item}
-      />
+      <Category2{...item}>
+        {this.renderItems(item.items)}
+      </Category2>
     );
   }
 
-  _Category2 (props) {
-    const def = (props.opened === undefined) ? true : props.opened;
-    const [ opened, onChange ] = React.useState(def);
-    props = { ...props, onChange, opened }; // eslint-disable-line object-property-newline
+  renderTabBar (item) {
+    const classes = getModule([ 'topPill', 'item' ], false);
+    const TabBar2  = (props) => {
+      const def = (props.opened === undefined) ? 0 : props.selected;
+      const [ selectedItem, onItemSelect ] = React.useState(def);
+      props = {
+        ...props,
+        selectedItem,
+        onItemSelect,
+        type: classes.topPill
+      };
 
-    return <Category {...props}/>;
+      return (
+        <div className='powercord-entities-manage powercord-text'>
+          <div className='powercord-entities-manage-tabs'>
+            <TabBar {...props}>
+              {
+                props.items.map((item, index) => (
+                  <TabBar.Item
+                    id={String(index)}
+                    selectedItem={selectedItem}
+                    className={classes.item}
+                  >
+                    {item.name}
+                  </TabBar.Item>
+                ))
+              }
+            </TabBar>
+          </div>
+          { this.renderItems(props.items[selectedItem].items) }
+        </div>
+      );
+    };
+
+    return <TabBar2 {...item}/>;
   }
 
   _passSetting (value = null, handler) {

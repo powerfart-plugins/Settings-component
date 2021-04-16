@@ -101,9 +101,10 @@ Settings.register({
 - [Radio Group](#RadioGroup)
 - [Checkbox](#Checkbox)
 - [Category](#Category)
+- [Tab Bar](#TabBar)
 
 #
-<a name="Switch">Switch</a>
+### <a name="Switch">Switch</a>
 
 Param   | Type
 --------|--------------
@@ -111,7 +112,7 @@ name    | Text/Element
 value   | value/Function
 onClick | Function
 
-<a name="ColorPicker">Color Picker</a>
+### <a name="ColorPicker">Color Picker</a>
 
 Param         | Type
 --------------|--------------
@@ -121,7 +122,7 @@ onChange      | Function
 defaultColor  | Int
 defaultColors | Array<Int>
 
-<a name="Slider">Slider</a>
+### <a name="Slider">Slider</a>
 
 Param          | Type           | Default | Description
 ---------------|----------------|---------|------------
@@ -132,8 +133,7 @@ keyboardStep   | Number         | 1       |
 stickToMarkers | Boolean        | true    |
 sequenceNumsUp | Number         |         | Creates an array of sequential numbers markers is equal to the length of the resulting number, the first element is 1
 
-
-<a name="Select">Select</a>
+### <a name="Select">Select</a>
 
 Param    | Type
 ---------|--------------
@@ -142,7 +142,7 @@ value    | Int/Function
 onChange | Function
 items    | Array<{label, value}>
 
-<a name="Text">Text</a>
+### <a name="Text">Text</a>
 
 Param          | Type           | Default | Description
 ---------------|----------------|---------|------------
@@ -152,7 +152,7 @@ default        | value/Function |         |
 onChange       | Function       |         | Expect an object with data `{error}`
 debounce       | Number (ms)    | 250     | Delay before calling `onChange`
 
-<a name="RadioGroup">Radio Group</a>
+### <a name="RadioGroup">Radio Group</a>
 
 Param    | Type
 ---------|--------------
@@ -161,7 +161,7 @@ value    | Int/Function
 onChange | Function
 items    | Array<{label, value}>
 
-<a name="Checkbox">Checkbox</a>
+### <a name="Checkbox">Checkbox</a>
 
 Param   | Type
 --------|--------------
@@ -169,10 +169,26 @@ name    | Text/Element
 value   | value/Function
 onClick | Function
 
-<a name="Category">Category</a>
+### <a name="Category">Category</a>
 
 Param  | Type                  | Default 
 -------|-----------------------|---------
 name   | Text/Element          |
-items  | Array<{label, value}> |
+items  | Array<{name, items}>  |
 opened | Boolean               | true
+
+### <a name="TabBar">Tab Bar</a>
+
+Param    | Type                  | Default
+---------|-----------------------|---------
+items    | Array<TabBarItem>     |
+selected | Number                | 0
+
+#### TabBarItem
+
+Param  | Type                  | Default
+-------|-----------------------|---------
+name   | Text/Element          |
+items  | Array<{name, items}>  |
+
+
