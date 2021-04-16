@@ -120,7 +120,7 @@ name          | Text/Element
 value         | Int/Function
 onChange      | Function
 defaultColor  | Int
-defaultColors | Array<Int>
+defaultColors | Array<`Int`>
 
 ### <a name="Slider">Slider</a>
 
@@ -140,7 +140,7 @@ Param    | Type
 name     | Text/Element
 value    | Int/Function
 onChange | Function
-items    | Array<{label, value}>
+items    | Array<`{ label, value }`>
 
 ### <a name="Text">Text</a>
 
@@ -150,7 +150,7 @@ name           | Text/Element   |         |
 value          | value/Function |         |
 default        | value/Function |         |
 onChange       | Function       |         | Expect an object with data `{error}`
-debounce       | Number (ms)    | 250     | Delay before calling `onChange`
+debounce       | Number         | 250     | Delay before calling `onChange` (ms)
 
 ### <a name="RadioGroup">Radio Group</a>
 
@@ -159,7 +159,7 @@ Param    | Type
 name     | Text/Element
 value    | Int/Function
 onChange | Function
-items    | Array<{label, value}>
+items    | Array<`{ label, value }`>
 
 ### <a name="Checkbox">Checkbox</a>
 
@@ -171,24 +171,24 @@ onClick | Function
 
 ### <a name="Category">Category</a>
 
-Param  | Type                  | Default 
--------|-----------------------|---------
-name   | Text/Element          |
-items  | Array<{name, items}>  |
-opened | Boolean               | true
+Param  | Type                      | Default 
+-------|---------------------------|---------
+name   | Text/Element              |
+items  | Array<`{ name, items }`>  |
+opened | Boolean                   | true
 
 ### <a name="TabBar">Tab Bar</a>
 
 Param    | Type                  | Default
 ---------|-----------------------|---------
-items    | Array<{TabBarItem}>   |
+items    | Array< `TabBarItem` > |
 selected | Number                | 0
 
 #### TabBarItem
 
-Param  | Type                  | Default
--------|-----------------------|---------
-name   | Text/Element          |
-items  | Array<{name, items}>  |
+Param  | Type                     | Default
+-------|--------------------------|---------
+name   | Text/Element             |
+items  | Array<`{ name, items }`> |
 
 
