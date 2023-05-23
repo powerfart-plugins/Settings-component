@@ -1,5 +1,9 @@
 # Settings component
 
+> **Warning**
+> Powercord client is EOL and no longer works with latest versions of Discord
+
+
 A settings component that does routine work for you
 
 ## Example
